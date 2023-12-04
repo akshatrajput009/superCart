@@ -1,0 +1,73 @@
+.intro {
+  height: 600px;
+  position: relative;
+  margin-bottom: 100px;
+}
+.welcome {
+  height: 500px;
+  width: 100%;
+  margin-top: 84px;
+  background-color: #f4ebe0;
+  display: flex;
+  flex-direction: row;
+}
+
+.welcomeText {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 80px;
+}
+
+.welcomeText .welcomeSubtext {
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  margin-bottom: 0;
+}
+
+.welcomeText h1 {
+  font-size: 60px;
+  margin-top: 20px;
+  font-weight: lighter;
+}
+
+.welcomeText span {
+  font-weight: 700;
+}
+
+.welcomePhoto {
+  width: 50%;
+  height: 100%;
+  padding: 60px 40px 0;
+  opacity: 0.9;
+}
+
+.welcomePhoto img {
+  width: 45%;
+  height: 100%;
+  border-radius: 15px;
+  position: absolute;
+  bottom: 0;
+  top: 50px;
+}
+
+/* .introPhotoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+}
+
+
+
+.introPhotoGrid .item1 {
+  grid-row: 1/3;
+} */
+
+/* .welcomePhoto .introPhotoGrid {
+  width: 100%;
+  height: 550px;
+} */

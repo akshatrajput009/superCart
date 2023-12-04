@@ -5,7 +5,25 @@ const passport = require("passport");
 
 const userController = require("../controller/user");
 
-router.post("/auth", passport.authenticate("local"), userController.fetchUser);
+router.post(
+  "/auth",
+  function (req, res, next) {
+    passport.authenticate("local", function (err, user, info) {
+      if (err) {
+        return res.status(500).json({ message: "Internal Server Error" });
+      }
+
+      if (!user) {
+        return res.status(401).json({ message: info.message });
+      }
+
+      // User authenticated successfully
+      // You can handle the successful authentication response here
+      res.json({ message: "Authentication successful", user });
+    })(req, res, next);
+  },
+  userController.fetchUser
+);
 
 router.post("/", userController.createUser);
 router.patch("/:id", userController.updateUser);

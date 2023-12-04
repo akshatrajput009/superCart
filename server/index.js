@@ -17,6 +17,7 @@ const User = require("./models/User");
 const LocalStrategy = require("passport-local").Strategy;
 const app = express();
 const cors = require("cors");
+
 app.use(express.json());
 app.use(passport.initialize());
 app.use(
@@ -54,71 +55,107 @@ app.use("/cart", cart);
 app.use("/orders", order);
 
 passport.use(
-  new LocalStrategy({ usernameField: "email" }, function (
-    email,
-    password,
-    done
-  ) {
-    console.log("fdfdf");
-    User.findOne({ email: email })
-      .then((user) => {
+  new LocalStrategy(
+    { usernameField: "email", failureFlash: true, failWithError: true },
+    async function (email, password, done) {
+      try {
+        const user = await User.findOne({ email: email });
+
         if (user) {
-          bcrypt.compare(password, user.password).then((isMatch) => {
-            if (isMatch) {
-              const payload = {
-                id: user.id,
-                email: user.email,
-                address: user.address,
-              };
-              done(null, {
-                id: user.id,
-                email: user.email,
-                address: user.address,
-              });
-              // jwt.sign(
-              //   payload,
-              //   process.env.SECRET_KEY,
+          const isMatch = await bcrypt.compare(password, user.password);
 
-              //   (err, token) => {
-              //     if (err) console.log("there is an error in jwt");
-              //     else {
-              //       done(null, {
-              //         success: true,
-              //         token: `Bearer ${token}`,
-              //       });
-              //     }
-              //   }
-              // );
-            } else {
-              done(null, false, { message: "Wrong credentials" });
-            }
-          });
+          if (isMatch) {
+            const userData = {
+              id: user.id,
+              email: user.email,
+              address: user.address,
+            };
 
-          // if (user.password === password) {
-
-          //   done(null, {
-          //     id: user.id,
-          //     email: user.email,
-          //     address: user.address,
-          //   });
-          //   // res
-          //   //   .status(201)
-          //   //   .json({ id: user.id, email: user.email, address: user.address });
-          // } else {
-          //   done(null, false, { message: "Wrong credentials" });
-
-          // }
+            done(null, userData); // User authenticated successfully
+          } else {
+            console.log("Password not matched");
+            done(null, false, { message: "Wrong credentials" });
+          }
         } else {
+          console.log("Email not matched");
           done(null, false, { message: "Wrong credentials" });
         }
-      })
-      .catch((err) => {
-        console.log(err);
-        done(err);
-        // res.status(400).json(err);
-      });
-  })
+      } catch (err) {
+        console.error(err);
+        done(err); // Handle unexpected errors
+      }
+    }
+  )
 );
+
+// passport.use(
+//   new LocalStrategy({ usernameField: "email", failureFlash: true }, function (
+//     email,
+//     password,
+//     done
+//   ) {
+//     console.log("fdfdf");
+//     User.findOne({ email: email })
+//       .then((user) => {
+//         if (user) {
+//           bcrypt.compare(password, user.password).then((isMatch) => {
+//             if (isMatch) {
+//               const payload = {
+//                 id: user.id,
+//                 email: user.email,
+//                 address: user.address,
+//               };
+//               done(null, {
+//                 id: user.id,
+//                 email: user.email,
+//                 address: user.address,
+//               });
+//               // jwt.sign(
+//               //   payload,
+//               //   process.env.SECRET_KEY,
+
+//               //   (err, token) => {
+//               //     if (err) console.log("there is an error in jwt");
+//               //     else {
+//               //       done(null, {
+//               //         success: true,
+//               //         token: `Bearer ${token}`,
+//               //       });
+//               //     }
+//               //   }
+//               // );
+//             } else {
+//               console.log("password not matched");
+//               done(null, false, { message: "Wrong credentials" });
+//             }
+//           });
+
+//           // if (user.password === password) {
+
+//           //   done(null, {
+//           //     id: user.id,
+//           //     email: user.email,
+//           //     address: user.address,
+//           //   });
+//           //   // res
+//           //   //   .status(201)
+//           //   //   .json({ id: user.id, email: user.email, address: user.address });
+//           // } else {
+//           //   done(null, false, { message: "Wrong credentials" });
+
+//           // }
+//         } else {
+//           console.log("username not matched");
+//           done(null, false, { message: "Wrong credentials" });
+//         }
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//         done(err);
+//         // res.status(400).json(err);
+//       });
+//   })
+// );
 
 passport.serializeUser(function (user, cb) {
   console.log("serl", user);

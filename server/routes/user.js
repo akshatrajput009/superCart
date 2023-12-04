@@ -19,7 +19,7 @@ router.post(
 
       // User authenticated successfully
       // You can handle the successful authentication response here
-      res.json({ message: "Authentication successful", user });
+      res.json({ user });
     })(req, res, next);
   },
   userController.fetchUser

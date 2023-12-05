@@ -1,7 +1,9 @@
 // A mock function to mimic making an async request for data
 export function fetchCategories() {
   return new Promise(async (resolve) => {
-    const response = await fetch("http://localhost:8080/categories");
+    const response = await fetch(
+      "https://vast-erin-katydid-belt.cyclic.app/categories"
+    );
 
     const data = await response.json();
     console.log(data, "data");
@@ -11,7 +13,9 @@ export function fetchCategories() {
 
 export function fetchBrands() {
   return new Promise(async (resolve) => {
-    const response = await fetch("http://localhost:8080/brands");
+    const response = await fetch(
+      "https://vast-erin-katydid-belt.cyclic.app/brands"
+    );
 
     const data = await response.json();
 
@@ -21,7 +25,9 @@ export function fetchBrands() {
 
 export function fetchProductDetails(id) {
   return new Promise(async (resolve) => {
-    const response = await fetch(`http://localhost:8080/products/${id}`);
+    const response = await fetch(
+      `https://vast-erin-katydid-belt.cyclic.app/products/${id}`
+    );
 
     const data = await response.json();
     console.log(data, "data");
@@ -51,7 +57,7 @@ export function fetchFilteredProducts({ filter, sort, pagination }) {
     }
 
     const response = await fetch(
-      `http://localhost:8080/products?${filterString}`
+      `https://vast-erin-katydid-belt.cyclic.app/products?${filterString}`
     );
 
     const data = await response.json();

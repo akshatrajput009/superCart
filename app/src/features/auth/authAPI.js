@@ -1,14 +1,18 @@
 // A mock function to mimic making an async request for data
 export function sendSignup(loginData) {
   return new Promise(async (resolve, reject) => {
-    const response = await fetch("http://localhost:8080/users", {
-      method: "POST",
-      body: JSON.stringify(loginData),
-      headers: { "content-type": "application/json" },
-    });
+    const response = await fetch(
+      "https://vast-erin-katydid-belt.cyclic.app/users",
+      {
+        method: "POST",
+        body: JSON.stringify(loginData),
+        headers: { "content-type": "application/json" },
+      }
+    );
     const data = await response.json();
 
     if (response.ok) {
+      window.localStorage.setItem("user", JSON.stringify(data));
       resolve({ data });
     } else {
       reject(data.message);
@@ -18,11 +22,14 @@ export function sendSignup(loginData) {
 
 export function sendLogin(sentData) {
   return new Promise(async (resolve, reject) => {
-    const response = await fetch(`http://localhost:8080/users/auth`, {
-      method: "POST",
-      body: JSON.stringify(sentData),
-      headers: { "content-type": "application/json" },
-    });
+    const response = await fetch(
+      `https://vast-erin-katydid-belt.cyclic.app/users/auth`,
+      {
+        method: "POST",
+        body: JSON.stringify(sentData),
+        headers: { "content-type": "application/json" },
+      }
+    );
     console.log(response);
     const data = await response.json();
     console.log(data);
@@ -54,7 +61,7 @@ export function updateAddress(user) {
     });
     const data = await response.json();
     console.log(data);
-    window.localStorage.setItem("user", data);
+    window.localStorage.setItem("user", JSON.stringify(data));
     resolve({ data });
   });
 }

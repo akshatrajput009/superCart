@@ -50,7 +50,9 @@ export const authSlice = createSlice({
     checkUser: (state) => {
       state.user = JSON.parse(window.localStorage.getItem("user"));
     },
-
+    setUserNull: (state) => {
+      state.user = "";
+    },
     // Use the PayloadAction type to declare the contents of `action.payload`
   },
 
@@ -86,13 +88,16 @@ export const authSlice = createSlice({
       })
       .addCase(updateAddressAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.user = window.localStorage.getItem("user");
+        console.log("updatedaddress");
+        state.user = JSON.parse(window.localStorage.getItem("user"));
+        console.log(state.user);
       });
   },
 });
 
-export const { checkUser } = authSlice.actions;
+export const { checkUser, setUserNull } = authSlice.actions;
 export const selectUser = (state) => state.auth.user;
 export const selectUserError = (state) => state.auth.error;
+export const selectUserStatus = (state) => state.auth.status;
 
 export default authSlice.reducer;

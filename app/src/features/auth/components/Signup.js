@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUser, sendSignupAsync } from "../authSlice";
+import { selectUser, selectUserStatus, sendSignupAsync } from "../authSlice";
 import { useForm } from "react-hook-form";
 import { Link, Navigate } from "react-router-dom";
 import { selectUserError } from "../authSlice";
+import companyLogo from "./assets/company logo.png";
 export function Signup() {
   const [user, setUser] = useState({});
   const currentUser = useSelector(selectUser);
   const error = useSelector(selectUserError);
+  const userStatus = useSelector(selectUserStatus);
   const dispatch = useDispatch();
   const {
     register,
@@ -31,9 +33,9 @@ export function Signup() {
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <img
-              className="mx-auto h-10 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-              alt="Your Company"
+              className="h-8 w-8 mx-auto rounded-full"
+              src={companyLogo}
+              alt="logo"
             />
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Create a new account
@@ -140,12 +142,16 @@ export function Signup() {
               </div>
 
               <div>
-                <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Sign Up
-                </button>
+                {userStatus === "loading" ? (
+                  <div className="w-8 h-8 border-t-2 border-blue-500 border-solid rounded-full animate-spin"></div>
+                ) : (
+                  <button
+                    type="submit"
+                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Sign Up
+                  </button>
+                )}
               </div>
             </form>
             <p className="text-red-600 mt-2">{error ? error : ""}</p>

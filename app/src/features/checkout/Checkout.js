@@ -18,7 +18,8 @@ export function Checkout() {
   const [defaultAddress, setDefaultAddress] = useState("");
   const [payment, setPayment] = useState("");
   const address = useSelector(selectAddress);
-  const user = JSON.parse(window.localStorage.getItem("user"));
+  const user =
+    useSelector(selectUser) || JSON.parse(window.localStorage.getItem("user"));
   const currentOrder = useSelector(selectCurrentOrder);
   const dispatch = useDispatch();
 
@@ -30,7 +31,8 @@ export function Checkout() {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    console.log({ ...user, address: [data, ...user.address] }, "upadd data");
+
     dispatch(updateAddressAsync({ ...user, address: [data, ...user.address] }));
   };
 
@@ -64,21 +66,25 @@ export function Checkout() {
   }, [products]);
 
   const handleOrder = () => {
-    defaultAddress &&
-      payment &&
-      dispatch(
-        addOrderAsync({
-          products,
-          subTotal,
-          address: defaultAddress,
-          paymentMethod: payment,
-          userId: user.id,
-        })
-      );
+    if (!defaultAddress) {
+      alert("Please select an address before proceeding.");
+      return;
+    }
 
-    // navigate to order success page when id is recieved
+    if (!payment) {
+      alert("Please select a payment method before proceeding.");
+      return;
+    }
 
-    // empty cart
+    dispatch(
+      addOrderAsync({
+        products,
+        subTotal,
+        address: defaultAddress,
+        paymentMethod: payment,
+        userId: user.id,
+      })
+    );
   };
 
   return products.length < 1 ? (
@@ -305,7 +311,7 @@ export function Checkout() {
                   Choose default address
                 </p>
                 <ul role="list" className="divide-y divide-gray-100">
-                  {user.address.map((person, index) => (
+                  {user.address?.map((person, index) => (
                     <li
                       key={index}
                       className="flex justify-between gap-x-6 py-5"

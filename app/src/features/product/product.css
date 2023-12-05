@@ -52,6 +52,27 @@
   top: 50px;
 }
 
+@media all and (max-width: 700px) {
+  .welcomeText {
+    width: 100%;
+    justify-content: start;
+  }
+  .welcomeText h1 {
+    font-size: 40px;
+  }
+  .welcome {
+    flex-direction: column;
+  }
+  .welcomePhoto {
+    width: 100%;
+  }
+
+  .welcomePhoto img {
+    position: static;
+    width: 100%;
+  }
+}
+
 /* .introPhotoGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

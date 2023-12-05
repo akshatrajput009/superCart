@@ -7,7 +7,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser } from "../auth/authSlice";
+import { selectUser, setUserNull } from "../auth/authSlice";
 import { Link, Navigate } from "react-router-dom";
 import { current } from "@reduxjs/toolkit";
 import { selectCart } from "../cart/cartSlice";
@@ -33,21 +33,24 @@ export const Navbar = ({ children }) => {
   const product = useSelector(selectCart);
   const dispatch = useDispatch();
   const userNavigation = [
-    { name: "Home", handleLink: () => {} },
+    {
+      name: "Home",
+      handleLink: () => {},
+      link: "/",
+    },
 
     {
       name: "My orders",
-      handleLink: () => {
-        console.log("fdf");
-        return <Navigate to="/myOrders" />;
-      },
+      handleLink: () => {},
       link: "/myOrders",
     },
     {
       name: "Sign out",
       handleLink: () => {
-        currentUser = "";
+        dispatch(setUserNull());
+        return window.localStorage.clear();
       },
+      link: "/login",
     },
   ];
 
@@ -61,17 +64,22 @@ export const Navbar = ({ children }) => {
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src={companyLogo}
-                        alt="logo"
-                      />
+                      <Link to="/">
+                        <img
+                          className="h-8 w-8 rounded-full"
+                          src={companyLogo}
+                          alt="logo"
+                        />
+                      </Link>
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                         {userNavigation.map((item) => (
                           <Link to={item.link}>
                             <p
+                              onClick={() => {
+                                item.handleLink();
+                              }}
                               className={classNames(
                                 item.current
                                   ? "bg-gray-900 text-white"
@@ -180,6 +188,9 @@ export const Navbar = ({ children }) => {
                   {userNavigation.map((item) => (
                     <Link to={item.link}>
                       <Disclosure.Button
+                        onClick={() => {
+                          item.handleLink();
+                        }}
                         className={classNames(
                           item.current
                             ? "bg-gray-900 text-white"

@@ -54,11 +54,14 @@ export function sendLogin(sentData) {
 
 export function updateAddress(user) {
   return new Promise(async (resolve) => {
-    const response = await fetch(`http://localhost:8080/users/${user.id}`, {
-      method: "PATCH",
-      body: JSON.stringify(user),
-      headers: { "content-type": "application/json" },
-    });
+    const response = await fetch(
+      `https://vast-erin-katydid-belt.cyclic.app/users/${user.id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(user),
+        headers: { "content-type": "application/json" },
+      }
+    );
     const data = await response.json();
     console.log(data);
     window.localStorage.setItem("user", JSON.stringify(data));

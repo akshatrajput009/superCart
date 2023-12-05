@@ -477,7 +477,7 @@ export function Checkout() {
                 Shipping and taxes calculated at checkout.
               </p>
               <div
-                className="mt-6"
+                className="mt-6 cursor-pointer"
                 onClick={() => {
                   handleOrder();
                 }}

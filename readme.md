@@ -29,6 +29,8 @@ SuperCart leverages a robust technology stack to deliver a cutting-edge and reli
 
   - Product's List Page for effortless browsing of the extensive product catalog.
   - Product Detail Page for in-depth information about each product.
+  - Sort products by price and rating for convenient navigation.
+  - Filter products by category and brand for a personalized shopping experience.
 
 - **Shopping Cart Management:**
 
